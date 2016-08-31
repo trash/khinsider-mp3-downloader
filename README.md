@@ -17,4 +17,5 @@ Simply run `$ python downloader.py` from inside the repo and enter a link like '
 ### `inputs.txt`
 
 Update the `inputs.txt` in the repo with a list of links, one link per line, and then run the script `$ python downloader.py`.
+The repo includes a properly formatted `inputs.txt` for reference.
 
