@@ -10,7 +10,7 @@ A script to crawl `http://downloads.khinsider.com/` for game soundtracks and dow
 
 ## How To Use
 
-### User Input
+### Input A URL Via CLI
 
 Simply run `$ python downloader.py` from inside the repo and enter a link like 'http://downloads.khinsider.com/game-soundtracks/album/disgaea-3-raspberyl' (including the quotes) when prompted in the command line and hit enter.
 
