@@ -3,10 +3,12 @@
 A script to crawl `http://downloads.khinsider.com/` for game soundtracks and download them. Downloads will be placed inside a `/downloads` directory inside the repo. Individual directories for each album will be generated automatically off the url name.
 
 ## Install
-1. `$ pip install virtualenv`
-2. `$ virtualenv venv`
-3. `$ source venv/bin/activate`
-4. `$ pip install -r requirements.txt`
+1. Install python from python.org if you haven't already. This will install `pip` so it can be nice to do either way.
+2. `$ pip install virtualenv`
+3. Start a new terminal instance so you can call `virtualenv`
+4. `$ virtualenv venv`
+5. `$ source venv/bin/activate`
+6. `$ pip install -r requirements.txt`
 
 ## How To Use
 
