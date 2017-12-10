@@ -4,7 +4,7 @@ import urllib2, json
 from bs4 import BeautifulSoup
 
 def validate_url (url):
-	if 'http://downloads.khinsider.com/game-soundtracks/album/' not in url:
+	if '//downloads.khinsider.com/game-soundtracks/album/' not in url:
 		return False
 	return True
 
@@ -54,7 +54,8 @@ def fetch_from_url (url):
 	for link in links:
 		link_soup = BeautifulSoup(urllib2.urlopen(link))
 		audio = link_soup.find('audio')
-		mp3_url = audio.get('src')
+		source = audio.find('source')
+		mp3_url = source.get('src')
 		if mp3_url not in downloaded_mp3s:
 			downloaded_mp3s[mp3_url] = True
 			parts = mp3_url.split('/')
