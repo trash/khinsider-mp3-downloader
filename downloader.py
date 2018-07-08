@@ -3,6 +3,8 @@ from urlparse import urlparse
 import urllib2, json
 from bs4 import BeautifulSoup
 
+BASE_URL = 'https://downloads.khinsider.com'
+
 def validate_url (url):
 	if '//downloads.khinsider.com/game-soundtracks/album/' not in url:
 		return False
@@ -31,35 +33,39 @@ def fetch_from_url (url):
 
 	soup = BeautifulSoup(urllib2.urlopen(url))
 
-	anchors = soup.find_all('a')
+	song_list = soup.find(id="songlist")
+	anchors = song_list.find_all('a')
+
+	# href (string) -> song name (string)
+	songMap = {}
 
 	# Acquire links
-	links = []
 	for anchor in anchors:
 		href = anchor.get('href')
-		if 'mp3' in href:
-			links.append(href)
-	if not len(links):
+		if href and 'mp3' in href:
+			href = BASE_URL + href
+			if href not in songMap:
+				songMap[href] = anchor.string
+	if not songMap:
 		print '[error] No links found for the url. Double check that the url is correct and try again.'
 		print '[error] url: ' + url
 		return
 
-	print '[info] links acquired'
+	print '[info] ' + str(len(songMap)) + ' links acquired'
 
 	# Map so we don't download duplicate links on the page
 	downloaded_mp3s = {}
 
 	# http://stackoverflow.com/questions/22676/how-do-i-download-a-file-over-http-using-python
 	# Iterate through links, grab the mp3s, and download them
-	for link in links:
-		link_soup = BeautifulSoup(urllib2.urlopen(link))
+	for href, song_name in songMap.iteritems():
+		link_soup = BeautifulSoup(urllib2.urlopen(href))
 		audio = link_soup.find('audio')
-		source = audio.find('source')
-		mp3_url = source.get('src')
+		mp3_url = audio.get('src')
 		if mp3_url not in downloaded_mp3s:
 			downloaded_mp3s[mp3_url] = True
 			parts = mp3_url.split('/')
-			file_name = parts[len(parts) - 1]
+			file_name = song_name
 
 			mp3file = urllib2.urlopen(mp3_url)
 
