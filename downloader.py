@@ -65,7 +65,7 @@ def fetch_from_url (url):
 		if mp3_url not in downloaded_mp3s:
 			downloaded_mp3s[mp3_url] = True
 			parts = mp3_url.split('/')
-			file_name = song_name
+			file_name = song_name + '.mp3'
 
 			mp3file = urllib2.urlopen(mp3_url)
 
