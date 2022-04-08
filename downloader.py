@@ -1,4 +1,5 @@
 import os
+import threading
 import urllib.parse as urlparse
 import urllib.request as urllib2, json
 from bs4 import BeautifulSoup
@@ -94,8 +95,13 @@ input_file_name = 'inputs.txt'
 if os.path.exists(input_file_name):
 	print('[info] Input file found. Parsing for links...')
 	file = open(input_file_name, 'r')
+	threads = []
 	for line in file:
-		fetch_from_url(line)
+		th = threading.Thread(target=fetch_from_url, args=(line, ))
+		th.start()
+		threads.append(th)
+	for th in threads:
+		th.join()
 else:
 	print('Please input link in quotes to album on khinsider.')
 	print('Example input (including quotes): \'http://downloads.khinsider.com/game-soundtracks/album/disgaea-4-a-promise-unforgotten-soundtrack\'')
