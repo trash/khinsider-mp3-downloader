@@ -68,22 +68,17 @@ def fetch_from_url (url):
 			parts = mp3_url.split('/')
 			file_name = song_name + '.mp3'
 
-			mp3file = urllib2.urlopen(mp3_url)
-
-			# get file size
-			meta = mp3file.info()
-			file_size = float(meta.get("Content-Length")) / 1000000
-
 			file_on_disk_path = dir_name + '/' + file_name
 			# check if file already exists
-			file_already_downloaded = False
-			if os.path.exists(file_on_disk_path):
-				stat = os.stat(file_on_disk_path)
-				file_already_downloaded = round(float(stat.st_size) / 1000000, 2) == round(file_size, 2)
+			file_already_downloaded = os.path.exists(file_on_disk_path)
 
-			# It exists but isn't already the same size
 			if not file_already_downloaded:
 				print('[downloading] ' + file_name + ' [%.2f' % file_size + 'MB]')
+				mp3file = urllib2.urlopen(mp3_url)
+
+				# get file size
+				meta = mp3file.info()
+				file_size = float(meta.get("Content-Length")) / 1000000
 
 				with open(file_on_disk_path,'wb') as output:
 					output.write(mp3file.read())
@@ -91,22 +86,20 @@ def fetch_from_url (url):
 			else:
 				print('[skipping] "' + file_name + '"" already downloaded.')
 
-input_file_name = 'inputs.txt'
-if os.path.exists(input_file_name):
-	print('[info] Input file found. Parsing for links...')
-	file = open(input_file_name, 'r')
-	threads = []
-	for line in file:
-		th = threading.Thread(target=fetch_from_url, args=(line, ))
-		th.start()
-		threads.append(th)
-	for th in threads:
-		th.join()
-else:
-	print('Please input link in quotes to album on khinsider.')
-	print('Example input (including quotes): \'http://downloads.khinsider.com/game-soundtracks/album/disgaea-4-a-promise-unforgotten-soundtrack\'')
-	url = input('Url: ')
-	fetch_from_url(url)
+if __name__ == '__main__':
+	input_file_name = 'inputs.txt'
+	if os.path.exists(input_file_name):
+		print('[info] Input file found. Parsing for links...')
+		file = open(input_file_name, 'r')
+		for line in file:
+			th = threading.Thread(target=fetch_from_url, args=(line, ))
+			th.start()
+			threads.append(th)
+	else:
+		print('Please input link in quotes to album on khinsider.')
+		print('Example input (including quotes): \'http://downloads.khinsider.com/game-soundtracks/album/disgaea-4-a-promise-unforgotten-soundtrack\'')
+		url = input('Url: ')
+		fetch_from_url(url)
 
 # For testing
 # url = 'http://downloads.khinsider.com/game-soundtracks/album/disgaea-4-a-promise-unforgotten-soundtrack'
