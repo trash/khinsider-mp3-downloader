@@ -17,7 +17,7 @@ def fetch_from_url(url):
 
     # Create directories
     if not os.path.exists(dir_name):
-        print('[info] creating directory: ' + dir_name)
+        print(f'[info] creating directory: {dir_name}')
         os.makedirs(dir_name)
 
     print('[info] crawling for links...')
